@@ -12,11 +12,7 @@ export default async function Home() {
 
   const content = (
   <section>
-      <h2>
-          <Link href = "/">Accueil</Link>
-          <br/>
-          <Link href ="/users">Users</Link>
-      </h2>
+      
       <br/>
       <table>
         <thead>

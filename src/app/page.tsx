@@ -3,8 +3,9 @@ import Link from "next/link";
 
 
 export default async function Home() {
-  const usersData : Promise<User[]> = getAllUsers()
 
+
+  const usersData : Promise<User[]> = getAllUsers()
   const users = await usersData
 
   

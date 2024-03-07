@@ -1,7 +1,7 @@
 "use client";
 import addUser from "@/lib/addUser";
 import { stringify } from "querystring";
-import { useState } from "react";
+import { MouseEventHandler, useState } from "react";
 
 export default function Form(){
 
@@ -24,9 +24,10 @@ export default function Form(){
         })
     }
 
-    //async function requeteAjoutNouvelUtilisateur () {
-    //    return addUser(formData);
-    //}
+    async function requeteAjoutNouvelUtilisateur (event: any) {
+        event.preventDefault()
+        return addUser(formData);
+    }
 
     return (
         <div>
@@ -57,7 +58,7 @@ export default function Form(){
                     onChange = {handleChange}
                     name = "email"
                     />
-                <button onClick={() => addUser(formData)}> ajouter utilisateur</button>
+                <button onClick={requeteAjoutNouvelUtilisateur}> ajouter utilisateur</button>
             </form>
         </div>
     )

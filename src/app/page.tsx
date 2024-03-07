@@ -1,8 +1,13 @@
-import getAllUsers from "../../lib/getAllUsers";
+import getAllUsers from "../lib/getAllUsers";
 import Link from "next/link";
+import NewUser from "../components/NewUser";
+
+
 
 
 export default async function Home() {
+
+  
 
 
   const usersData : Promise<User[]> = getAllUsers()
@@ -11,8 +16,7 @@ export default async function Home() {
   
 
   const content = (
-  <section>
-      
+    <section>
       <br/>
       <table>
         <thead>
@@ -24,21 +28,22 @@ export default async function Home() {
         </thead>
         <tbody>
           {users.map(user => (
-          <tr>
-          <th>{user.nom}</th>
-          <th>{user.prenom}</th>
-          <th>{user.email}</th>
-          </tr>
-        
+            <tr>
+              <th>{user.nom}</th>
+              <th>{user.prenom}</th>
+              <th>{user.email}</th>
+            </tr>
           ))}
         </tbody>
       </table>
-     
-  </section>
-)
+      <NewUser/>
+      <br/>
+      
+    </section>
+  )
 
 
-return content
+  return content
 }
 
 

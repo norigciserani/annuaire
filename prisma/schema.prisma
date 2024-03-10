@@ -24,3 +24,15 @@ model User {
   nom   String
   prenom String
 }
+
+model Chambredispo {
+  id Int @id @default(autoincrement())
+  numero Int
+  typechambre String
+  prix Int
+  occupation Int
+  boitier String
+  code String
+  date DateTime
+  disponibilite Boolean
+}

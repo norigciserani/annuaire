@@ -1,22 +1,18 @@
 import getAllUsers from "../lib/getAllUsers";
 import Link from "next/link";
 import NewUser from "../components/NewUser";
+import { stringify } from "querystring";
 
-
-
+let dateDuJour : string = "YYYY-MM-DD"
 
 export default async function Home() {
-
-  
-
 
   const usersData : Promise<User[]> = getAllUsers()
   const users = await usersData
 
-  
-
-  const content = (
+  return (
     <section>
+      <h1>{dateDuJour}</h1>
       <br/>
       <table>
         <thead>
@@ -24,6 +20,7 @@ export default async function Home() {
             <th>NOM</th>
             <th>PRENOM</th>
             <th>EMAIL</th>
+            <th>ACTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -32,18 +29,15 @@ export default async function Home() {
               <th>{user.nom}</th>
               <th>{user.prenom}</th>
               <th>{user.email}</th>
+              <th><button>delete</button></th>
             </tr>
           ))}
         </tbody>
       </table>
       <NewUser/>
-      <br/>
-      
+      <br/> 
     </section>
   )
-
-
-  return content
 }
 
 

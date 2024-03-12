@@ -1,8 +1,7 @@
+"use client"
+import AddRoom from "@/components/AddRoom";
+import removeRoom from "@/lib/removeRoom";
 import chambreDispo from "@/lib/chambreDispo";
-import Link from "next/link";
-import { stringify } from "querystring";
-
-let dateDuJour : string = "YYYY-MM-DD"
 
 export default async function Home() {
 
@@ -19,13 +18,14 @@ export default async function Home() {
       <table>
         <thead>
           <tr>
-            <th>numero</th>
-            <th>prix</th>
-            <th>occupation</th>
-            <th>boitier</th>
-            <th>code</th>
-            <th>typechambre</th>
-            <th>disponibilite</th>
+            <th>NUMERO</th>
+            <th>PRIX</th>
+            <th>OCCUPATION</th>
+            <th>BOITIER</th>
+            <th>CODE</th>
+            <th>TYPECHAMBRE</th>
+            <th>DISPONIBILITE</th>
+            <th>OPTIONS</th>
           </tr>
         </thead>
         <tbody>
@@ -38,11 +38,13 @@ export default async function Home() {
               <th>{chambre.code}</th>
               <th>{chambre.typechambre}</th>
               <th>{chambre.disponibilite ? "✅️" : "❌"}</th>
+              <th><button onClick={() => removeRoom(chambre.numero , dateDuJour)}>🗑️</button></th>
             </tr>
           ))}
         </tbody>
       </table>
       <br/>
+      <AddRoom/>
     </section>
   )
 }

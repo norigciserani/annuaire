@@ -1,9 +1,6 @@
 import getAllUsers from "../lib/getAllUsers";
-import Link from "next/link";
 import NewUser from "../components/NewUser";
-import { stringify } from "querystring";
 
-let dateDuJour : string = "YYYY-MM-DD"
 
 export default async function Home() {
 
@@ -12,7 +9,6 @@ export default async function Home() {
 
   return (
     <section>
-      <h1>{dateDuJour}</h1>
       <br/>
       <table>
         <thead>

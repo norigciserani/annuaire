@@ -97,9 +97,8 @@ export default function Form(){
                 <>  </>
                 <label> Disponibilité :</label>
                 <input
-                    type = "text"
-                    placeholder= "Entrez disponibilite"
-                    value = {formData.disponibilite}
+                    type = "checkbox"
+                    checked = {formData.disponibilite}
                     onChange = {handleChange}
                     name = "disponibilite"
                     />

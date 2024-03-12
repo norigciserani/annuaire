@@ -27,7 +27,7 @@ model User {
 
 model Chambredispo {
   id Int @id @default(autoincrement())
-  numero Int
+  numero String
   typechambre String
   prix Int
   occupation Int

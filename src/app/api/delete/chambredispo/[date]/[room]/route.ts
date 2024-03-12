@@ -7,7 +7,7 @@ export async function DELETE(req: Request, context: any) {
     const { params } = context
     const date = params.date
     const datetime = new Date(date)
-    const room: number = +params.room
+    const room: string = params.room
     const chambreadelete = await prisma.chambredispo.findMany({
         where: {
             date: datetime,

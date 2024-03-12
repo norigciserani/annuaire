@@ -5,8 +5,6 @@ import { MouseEventHandler, useState } from "react";
 
 export default function Form(){
 
-   
-
     const [formData, setFormData] = useState({
         nom: "",
         prenom: "",

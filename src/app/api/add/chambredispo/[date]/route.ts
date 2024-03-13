@@ -22,5 +22,5 @@ export async function POST(req: Request, context: any) {
         }
     })
     
-    return NextResponse.json({message: "ok"})
+    return NextResponse.json({message: "ok", data: chambredispo})
 }

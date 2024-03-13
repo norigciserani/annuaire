@@ -6,4 +6,5 @@ export default async function addRoom(newroom : any , date : string){
         method : 'POST',
         body: JSON.stringify(newroom),
       })  
+    return res.json()
 }

@@ -24,5 +24,5 @@ export async function DELETE(req: Request, context: any) {
     // } else {
     //     const deleteChambredispo = await prisma.chambredispo.deleteMany(chambreadelete)
     // }
-    return NextResponse.json({ "status": "ok" })
+    return NextResponse.json({ "status": "ok", data: chambreadelete })
 }

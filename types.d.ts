@@ -6,6 +6,7 @@ type User = {
   }
 
 type chambredispo = {
+  "id" : number,
   "numero" : string,
   "prix" : number,
   "occupation" : number,

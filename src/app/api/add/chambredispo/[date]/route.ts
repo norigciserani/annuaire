@@ -18,7 +18,7 @@ export async function POST(req: Request, context: any) {
             occupation: dataIn.occupation,
             boitier: dataIn.boitier,
             code: dataIn.code,
-            disponibilite: true
+            disponibilite: dataIn.disponibilite
         }
     })
     

@@ -14,11 +14,11 @@ export default function Form(){
         boitier : "",
         code : "",
         typechambre : "",
-        disponibilite : false,
+        disponibilite : true,
     })
     
 
-    const handleChange = (event : any) => {
+    /*const handleChange = (event : any) => {
         const {type,name,value} = event.target 
         setFormData(prev => {
             return {
@@ -26,7 +26,22 @@ export default function Form(){
                 [name]:value
             }
         })
-    }
+    }*/
+    
+    const handleChange = (event : any) => {
+        const { name, value, type, checked } = event.target;
+        const newValue = type === 'checkbox' ? checked : value;
+
+        setFormData(prevState => {
+            return{
+                ...prevState,
+                [name]: newValue
+            }
+        });
+    };
+
+    
+    
 
     async function requeteAjoutNouvelleChambre (event: any) {
         event.preventDefault()
@@ -52,7 +67,7 @@ export default function Form(){
                 <>  </>
                 <label> Prix :</label>
                 <input
-                    type = "text"
+                    type = "number"
                     placeholder= "Entrez prix"
                     value = {formData.prix}
                     onChange = {handleChange}
@@ -61,7 +76,7 @@ export default function Form(){
                 <>  </>
                 <label> Occupation :</label>
                 <input
-                    type = "text"
+                    type = "number"
                     placeholder= "Entrez occupation"
                     value = {formData.occupation}
                     onChange = {handleChange}
@@ -102,6 +117,7 @@ export default function Form(){
                     onChange = {handleChange}
                     name = "disponibilite"
                     />
+                <>  </>
                 <button onClick={requeteAjoutNouvelleChambre}> ajouter chambre</button>
             </form>
         </div>

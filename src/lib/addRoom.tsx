@@ -7,6 +7,6 @@ export default async function addRoom(newroom : any , date : string){
     const res = await fetch(`http://localhost:3000/api/add/chambredispo/${date}`, {
         method : 'POST',
         body: JSON.stringify(newroom),
-      })
-  return res.json();
+      })  
+    return res.json()
 }

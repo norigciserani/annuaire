@@ -1,27 +1,42 @@
 "use client";
 import addRoom from "@/lib/addRoom";
+import { Button, Card, Checkbox, Select } from "@material-tailwind/react";
 import { stringify } from "querystring";
-import { FunctionComponent, MouseEventHandler, useState , useEffect } from "react";
-import getTypeChambre from "@/lib/getTypeChambre";
-import { array } from "zod";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 
-//export const Form: FunctionComponent<typeChambreProps> = (props) => {
-export default function Form(props : any){
+type Chambre = {
+    "id" : number,
+    "numero" : string,
+    "prix" : number,
+    "occupation" : number,
+    "boitier" : string,
+    "code": string,
+    "typechambre": string,
+    "disponibilite" : boolean
+}
 
-    //le probleme c'est qu'on importe un props qui n'a aucun type mais si on veut l'utiliser, faut qu'il soit du type string[]
+type ResponseAdd = {
+    message: string,
+    data: Chambre | undefined
+}
 
+export default function Form(props: any){
 
-    const [formData, setFormData] = useState({
+    const formAtZero = {
         numero : "",
         prix : 60,
         occupation : 2,
         boitier : "",
         code : "",
         typechambre : "",
-        disponibilite : false,
-    })
-    
+        disponibilite : true,
+    }
+
+    const [formData, setFormData] = useState(formAtZero)
+    const [loading, setLoading] = useState(false)
+    const [typesChambre, setTypesChambre] = useState(Array<string>)
+
     const handleChange = (event : any) => {
         const { name, value, type, checked } = event.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -34,10 +49,29 @@ export default function Form(props : any){
         });
     };
 
-   /* async function typesdechambre() {
-        const typesdechambresData : Promise<string[]> = getTypeChambre()
-        const typedechambres = await typesdechambresData
-    }*/
+    useEffect(() => {
+        fetchTypeChambre()
+    }, [])
+    const fetchTypeChambre = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(`/api/typedechambre`, {
+                cache: 'no-store',
+                headers: {
+                    Accept: "application/json",
+                    method: "GET"
+            }})
+            if (response) {
+                const data: string[] = await response.json()
+                console.log(data)
+                setTypesChambre(data)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const [typesChambre , setTypesChambre] = useState(Array<string>)
 
@@ -56,19 +90,15 @@ export default function Form(props : any){
         let date = new Date(Date.now())
         let dateDuJour : string = date.toISOString()
         dateDuJour = dateDuJour.split("T")[0]
-
-        const res = await addRoom(formData , dateDuJour);
-        if (res.message == "ok"){
-            res.chambredispo
-            props.chambres.push(res.chambres)
-            props.setChambres(props.chambres)
-            //props.setChambres([...props.chambres, res.chambres])  
-            }
+        const newRoom: ResponseAdd = await addRoom(formData , dateDuJour)
+        props.onAdd([...props.onState, newRoom.data])
+        setFormData(formAtZero)
     }
 
     return (
-        <div>
-            <form>
+        <Card color="transparent" shadow={false}>
+            <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+                <div className="mb-1 flex flex-col">
                 <label> Numero :</label>
                 <input
                     type = "text"
@@ -117,25 +147,41 @@ export default function Form(props : any){
                 <>  </>
                 <label> Typechambre :</label>
                 <select 
+                    value={formData.typechambre}
+                    onChange={handleChange}
+                    name={"typechambre"}
+                    >
+                        <option value=""></option>
+                        {typesChambre.map(typeChambre => (
+                            <option value={typeChambre} key={typeChambre}>{typeChambre}</option>
+                        ))}
+                    </select>
+                    
+                {/* <input
+                    type = "text"
+                    placeholder= "Entrez typechambre"
                     value = {formData.typechambre}
                     onChange = {handleChange}
-                    name="typechambre"
-                    >
-                    {typesChambre.map(typechambre => (
-                        <option value={typechambre}>{typechambre}</option>
-                    ))}
-                </select>
-                <>  </> 
-                <label> Disponibilité :</label>
+                    name = "typechambre"
+                    /> */}
+
+                {/* <label> Disponibilité :</label>
                 <input
                     type = "checkbox"
                     checked = {formData.disponibilite}
                     onChange = {handleChange}
                     name = "disponibilite"
-                    />
-                <>  </>
-                <button onClick  = {() => requeteAjoutNouvelleChambre}> ajouter chambre </button>
+                    /> */}
+
+                <Checkbox
+                    label="Disponible"
+                    checked={formData.disponibilite}
+                    onChange={handleChange}
+                    name="disponibilite"
+                />
+                <Button onClick={requeteAjoutNouvelleChambre}> ajouter chambre</Button>
+                </div>
             </form>
-        </div>
+        </Card>
     )
 }

@@ -1,13 +1,29 @@
 "use client";
 import addRoom from "@/lib/addRoom";
+import { Button, Card, Checkbox, Select } from "@material-tailwind/react";
 import { stringify } from "querystring";
-import { MouseEventHandler, useState } from "react";
+import { MouseEventHandler, useEffect, useState } from "react";
 
 
+type Chambre = {
+    "id" : number,
+    "numero" : string,
+    "prix" : number,
+    "occupation" : number,
+    "boitier" : string,
+    "code": string,
+    "typechambre": string,
+    "disponibilite" : boolean
+}
 
-export default function Form(){
+type ResponseAdd = {
+    message: string,
+    data: Chambre | undefined
+}
 
-    const [formData, setFormData] = useState({
+export default function Form(props: any){
+
+    const formAtZero = {
         numero : "",
         prix : 60,
         occupation : 2,
@@ -15,19 +31,12 @@ export default function Form(){
         code : "",
         typechambre : "",
         disponibilite : true,
-    })
-    
+    }
 
-    /*const handleChange = (event : any) => {
-        const {type,name,value} = event.target 
-        setFormData(prev => {
-            return {
-                ...prev,
-                [name]:value
-            }
-        })
-    }*/
-    
+    const [formData, setFormData] = useState(formAtZero)
+    const [loading, setLoading] = useState(false)
+    const [typesChambre, setTypesChambre] = useState(Array<string>)
+
     const handleChange = (event : any) => {
         const { name, value, type, checked } = event.target;
         const newValue = type === 'checkbox' ? checked : value;
@@ -40,8 +49,29 @@ export default function Form(){
         });
     };
 
-    
-    
+    useEffect(() => {
+        fetchTypeChambre()
+    }, [])
+    const fetchTypeChambre = async () => {
+        try {
+            setLoading(true)
+            const response = await fetch(`/api/typedechambre`, {
+                cache: 'no-store',
+                headers: {
+                    Accept: "application/json",
+                    method: "GET"
+            }})
+            if (response) {
+                const data: string[] = await response.json()
+                console.log(data)
+                setTypesChambre(data)
+            }
+        } catch (error) {
+            console.log(error)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     async function requeteAjoutNouvelleChambre (event: any) {
         event.preventDefault()
@@ -49,13 +79,15 @@ export default function Form(){
         let date = new Date(Date.now())
         let dateDuJour : string = date.toISOString()
         dateDuJour = dateDuJour.split("T")[0]
-
-        return addRoom(formData , dateDuJour);
+        const newRoom: ResponseAdd = await addRoom(formData , dateDuJour)
+        props.onAdd([...props.onState, newRoom.data])
+        setFormData(formAtZero)
     }
 
     return (
-        <div>
-            <form>
+        <Card color="transparent" shadow={false}>
+            <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+                <div className="mb-1 flex flex-col">
                 <label> Numero :</label>
                 <input
                     type = "text"
@@ -102,24 +134,42 @@ export default function Form(){
                     />
                 <>  </>
                 <label> Typechambre :</label>
-                <input
+                <select 
+                    value={formData.typechambre}
+                    onChange={handleChange}
+                    name={"typechambre"}
+                    >
+                        <option value=""></option>
+                        {typesChambre.map(typeChambre => (
+                            <option value={typeChambre} key={typeChambre}>{typeChambre}</option>
+                        ))}
+                    </select>
+                    
+                {/* <input
                     type = "text"
                     placeholder= "Entrez typechambre"
                     value = {formData.typechambre}
                     onChange = {handleChange}
                     name = "typechambre"
-                    />
-                <>  </>
-                <label> Disponibilité :</label>
+                    /> */}
+
+                {/* <label> Disponibilité :</label>
                 <input
                     type = "checkbox"
                     checked = {formData.disponibilite}
                     onChange = {handleChange}
                     name = "disponibilite"
-                    />
-                <>  </>
-                <button onClick={requeteAjoutNouvelleChambre}> ajouter chambre</button>
+                    /> */}
+
+                <Checkbox
+                    label="Disponible"
+                    checked={formData.disponibilite}
+                    onChange={handleChange}
+                    name="disponibilite"
+                />
+                <Button onClick={requeteAjoutNouvelleChambre}> ajouter chambre</Button>
+                </div>
             </form>
-        </div>
+        </Card>
     )
 }
